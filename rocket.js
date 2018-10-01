@@ -6,9 +6,26 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 } : function(obj) {
 	return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj;
 };
-(() => {
+// (() => {
 
+    class Tween {
+        constructor(duration, from, to, easing) {
+            this.duration = duration;
+            this.from = from;
+            this.to = to;
+            this.easing = easing;
 
+        }
+        start() {
+            this.time = Date.now()
+        }
+        tween() {
+            if (!this.time) return this.froml
+            var now = Data.now();
+            var lapsed = Math.min(now - this.time, this.duration);
+            return this.from + Easing[this.easing](lapsed / this.duration) * (this.to - ths.from);
+        }
+    }
     function Easing() {
         var easings, baseEasings = {};
         easings = {
@@ -54,12 +71,13 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     }
     //algo Vector
     class Vector {
+        
         constructor(x, y) {
             this.x = x;
             this.y = y;
 
         }
-        add() {
+        add(v) {
             if (v instanceof Vector) {
                 this.x += v.x;
                 this.y += v.y;
@@ -69,7 +87,19 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             }
             return this;
         }
-        substract() {
+        // set X(value){
+        //     this.x = value
+        // }
+        // get X(){
+        //     return this.x
+        // }
+        // set Y (value ) {
+        //     this.y = value
+        // }
+        // get Y(){
+        //     return this.y
+        // }
+        substract(v) {
             if (v instanceof Vector) {
                 this.x -= v.x;
                 this.y -= v.y;
@@ -79,7 +109,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             }
             return this;
         }
-        multiply() {
+        multiply(v) {
             if (v instanceof Vector) {
                 this.x *= v.x;
                 this.y *= v.y;
@@ -89,7 +119,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             }
             return this;
         }
-        divide() {
+        divide(v) {
             if (v instanceof Vector) {
                 this.x /= v.x;
                 this.y /= v.y;
@@ -113,11 +143,13 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             var radius = arguments.length <= 1 || arguments[1] === undefined ? 1 : arguments[1];
             return new Vector(radius * Math.cos(this.deg2rad(deg)), radius * Math.sin(this.deg2rad(deg)));
         }
-        static randomAngle() {
+        static randomAngle( from  ,to) {
             return from + Math.random() * (to - from);
         }
 
     }
+        // code class tween 
+    
     //draw cirle
     class Particle {
         constructor(canvas, x, y, props) {
@@ -154,25 +186,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 			this.context.fill();
         }
     }
-    // code class tween 
-    class Tween {
-        constructor(duration, from, to, easing) {
-            this.duration = duration;
-            this.from = from;
-            this.to = to;
-            this.easing = easing;
 
-        }
-        start() {
-            this.time = Date.now()
-        }
-        tween() {
-            if (!this.time) return this.froml
-            var now = Data.now();
-            var lapsed = Math.min(now - this.time, this.duration);
-            return this.from + Easing[this.easing](lapsed / this.duration) * (this.to - ths.from);
-        }
-    }
     class Emitter {
         constructor(canvas, x, y, props) {
             this.canvas = canvas
@@ -245,25 +259,25 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
        get x  ()  {
             return this.pos.x
         }
-        set x  (value) {
-            return this.pos.x = value
+    set x  (value) {
+            return this.pos.x(value)
         }
        get y ()  {
             return this.pos.y
         }
         set y  (value)  {
-            return this.pos.y = value
+            return this.pos.y(value)
         }
     }
     console.log('aaa')
     window.easing = Easing()
     window.Tween = Tween
     window.Emitter  =Emitter ; 
-    window.Tween  = Tween;
+    window.Tween  = Tween
     window.Particle = Particle;
     window.Vector = Vector
 
-})()
+// })()
 // var Emitter = function() {
 // 	function Emitter() {
 // 		var canvas = arguments.length <= 0 || arguments[0] === undefined ? window.canvas : arguments[0];
