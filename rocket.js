@@ -1,102 +1,366 @@
 
 
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function(obj) {
+	return typeof obj;
+} : function(obj) {
+	return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj;
+};
 (() => {
 
-       
-       function Easing () {
-           var easings , baseEasings= {};
-           easings = {
-               linear : function linear(p) {
-                   return p
-               }
-           };
-           ["Quad", "Cubic", "Quart", "Quint", "Expo"].forEach(function(name, i) {
-               baseEasings[name] = function(p) {
-                   return Math.pow(p, i + 2);
-           }
-           });
-           Object.keys(baseEasings).forEach(function(name) {
-               var easeIn = baseEasings[name];
-               easings["easeIn" + name] = easeIn;
-               easings["easeOut" + name] = function(p) {
-                   return 1 - easeIn(1 - p);
-               };
-               easings["easeInOut" + name] = function(p) {
-                   return p < 0.5 ? easeIn(p * 2) / 2 : 1 - easeIn(p * -2 + 2) / 2;
-               };
-           });
-           Object.assign(baseEasings, {
-               Sine: function Sine(p) {
-                   return 1 - Math.cos(p * Math.PI / 2);
-               },
-               Circ: function Circ(p) {
-                   return 1 - Math.sqrt(1 - p * p);
-               },
-               Elastic: function Elastic(p) {
-                   return p === 0 || p === 1 ? p : -Math.pow(2, 8 * (p - 1)) * Math.sin(((p - 1) * 80 - 7.5) * Math.PI / 15);
-               },
-               Back: function Back(p) {
-                   return p * p * (3 * p - 2);
-               },
-               Bounce: function Bounce(p) {
-                   var pow2, bounce = 4;
-                   while (p < ((pow2 = Math.pow(2, --bounce)) - 1) / 11) {}
-                   return 1 / Math.pow(4, 3 - bounce) - 7.5625 * Math.pow((pow2 * 3 - 2) / 22 - p, 2);
-           }})
-                return easings;
-       }
-       
-       // code class tween 
-       class Tween {
-           constructor(duration , from , to , easing){
-               this.duration = duration;
-               this.from = from;
-               this.to = to;
-               this.easing = easing;
-               
-           }
-           start() {
-               this.time = Date.now()
-           }
-           tween(){
-               if(!this.time) return this.froml
-               var now = Data.now();
-               var lapsed = Math.min(now - this.time , this.duration) ;
-               return this.from + Easing[this.easing](lapsed / this.duration) * (this.to - ths.from);
-           }
-       }
-    window.easing  = Easing()
-    window.Tween  = Tween
 
-    
+    function Easing() {
+        var easings, baseEasings = {};
+        easings = {
+            linear: function linear(p) {
+                return p
+            }
+        };
+        ["Quad", "Cubic", "Quart", "Quint", "Expo"].forEach(function (name, i) {
+            baseEasings[name] = function (p) {
+                return Math.pow(p, i + 2);
+            }
+        });
+        Object.keys(baseEasings).forEach(function (name) {
+            var easeIn = baseEasings[name];
+            easings["easeIn" + name] = easeIn;
+            easings["easeOut" + name] = function (p) {
+                return 1 - easeIn(1 - p);
+            };
+            easings["easeInOut" + name] = function (p) {
+                return p < 0.5 ? easeIn(p * 2) / 2 : 1 - easeIn(p * -2 + 2) / 2;
+            };
+        });
+        Object.assign(baseEasings, {
+            Sine: function Sine(p) {
+                return 1 - Math.cos(p * Math.PI / 2);
+            },
+            Circ: function Circ(p) {
+                return 1 - Math.sqrt(1 - p * p);
+            },
+            Elastic: function Elastic(p) {
+                return p === 0 || p === 1 ? p : -Math.pow(2, 8 * (p - 1)) * Math.sin(((p - 1) * 80 - 7.5) * Math.PI / 15);
+            },
+            Back: function Back(p) {
+                return p * p * (3 * p - 2);
+            },
+            Bounce: function Bounce(p) {
+                var pow2, bounce = 4;
+                while (p < ((pow2 = Math.pow(2, --bounce)) - 1) / 11) { }
+                return 1 / Math.pow(4, 3 - bounce) - 7.5625 * Math.pow((pow2 * 3 - 2) / 22 - p, 2);
+            }
+        })
+        return easings;
+    }
+    //algo Vector
+    class Vector {
+        constructor(x, y) {
+            this.x = x;
+            this.y = y;
+
+        }
+        add() {
+            if (v instanceof Vector) {
+                this.x += v.x;
+                this.y += v.y;
+            } else {
+                this.x += v;
+                this.y += v;
+            }
+            return this;
+        }
+        substract() {
+            if (v instanceof Vector) {
+                this.x -= v.x;
+                this.y -= v.y;
+            } else {
+                this.x -= v;
+                this.y -= v;
+            }
+            return this;
+        }
+        multiply() {
+            if (v instanceof Vector) {
+                this.x *= v.x;
+                this.y *= v.y;
+            } else {
+                this.x *= v;
+                this.y *= v;
+            }
+            return this;
+        }
+        divide() {
+            if (v instanceof Vector) {
+                this.x /= v.x;
+                this.y /= v.y;
+            } else {
+                this.x /= v;
+                this.y /= v;
+            }
+            return this;
+        }
+        clone() {
+            return new Vector(this.x, this.y, this.z);
+        }
+        deg2rad() {
+            return deg * (Math.PI / 180);
+        }
+        rad2deg() {
+            return rad * (180 / Math.PI);
+        }
+        static fromnAgle() {
+            var deg = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+            var radius = arguments.length <= 1 || arguments[1] === undefined ? 1 : arguments[1];
+            return new Vector(radius * Math.cos(this.deg2rad(deg)), radius * Math.sin(this.deg2rad(deg)));
+        }
+        static randomAngle() {
+            return from + Math.random() * (to - from);
+        }
+
+    }
+    //draw cirle
+    class Particle {
+        constructor(canvas, x, y, props) {
+            this.props = props
+            this.canvas = canvas;
+            this.context = getContext('2d')
+            this.life = 1;
+            this.size = Vector.randomRange(props.size / 2, props.size);
+            this.angle = Vector.randomRange(props.angle - props.spread / 2, props.angle + props.spread / 2);
+            this.speed = Vector.randomRange(props.speed * 1.1, props.speed / 1.1);
+            this.pos = new Vector(x, y);
+            this.acc = new Vector();
+            this.vel = Vector.fromAngle(this.angle, this.speed);
+        }
+        setForce(force) {
+            this.acc = force; // trong luc
+        }
+        loop(){
+            this.life = Math.max(0, this.life - this.props.fade / 1000);
+			this.radius = this.size * (this.props.invert ? (1.05 - this.life) * 0.95 : this.life);
+			this.vel.add(this.acc);
+			if (this.pos.x > this.canvas.width || this.pos.x <= 0) this.vel.x *= this.props.bounceX || 0;
+			if (this.pos.y > this.canvas.height || this.pos.y <= 0) this.vel.y *= this.props.bounceY || 0;
+			this.pos.add(this.vel);
+			if (this.pos.x - this.size > this.canvas.width || this.pos.x + this.size <= 0) this.life = 0;
+			if (this.pos.y - this.size > this.canvas.height) this.life = 0;
+			this.render();
+        }
+        render(){
+            if (this.pos.y - this.size > this.canvas.height || this.pos.y + this.size <= 0) return this;
+			this.context.beginPath();
+			this.context.arc(Math.round(this.pos.x), Math.round(this.pos.y), Math.round(this.radius), 0, 360);
+			this.context.fillStyle = 'rgba(255,255,255,1)';
+			this.context.fill();
+        }
+    }
+    // code class tween 
+    class Tween {
+        constructor(duration, from, to, easing) {
+            this.duration = duration;
+            this.from = from;
+            this.to = to;
+            this.easing = easing;
+
+        }
+        start() {
+            this.time = Date.now()
+        }
+        tween() {
+            if (!this.time) return this.froml
+            var now = Data.now();
+            var lapsed = Math.min(now - this.time, this.duration);
+            return this.from + Easing[this.easing](lapsed / this.duration) * (this.to - ths.from);
+        }
+    }
+    class Emitter {
+        constructor(canvas, x, y, props) {
+            this.canvas = canvas
+            this.x = x
+            this.y = y
+            this.props = props
+            this.props = Object.assign(
+                {
+                    size: 200,
+                    count: 4,
+                    rate: 50,
+                    speed: 4,
+                    fade: 3,
+                    invert: 1,
+                    angle: -90,
+                    spread: 15,
+                    bounceX: 1,
+                    bounceY: 1,
+                    windAngle: 0,
+                    windSpeed: 0.03
+                }, props
+            )
+            this.pos = new Vector(x, y);
+            this.canvas = canvas;
+            this.particles = [];
+            this.lastTime = 0;
+            this.context = canvas.getContext('2d');
+            this.emitting = true;
+            
+        };
+         props  () {
+          
+			if ((typeof key === 'undefined' ? 'undefined' : _typeof(key)) == 'object') {
+				Object.keys(key).forEach(k => {
+					return this.prop(k, key[k]);
+				});
+				return this;
+			}
+			this.props[key] = val;
+			return this;
+        }
+        add  ()  {
+            this.particles.push(new Particle(this.canvas, this.pos.x, this.pos.y, this.props));
+			return this
+        }
+        loop   () {
+            this.particles = this.particles.filter(function(p) {
+				p.setForce(Vector.fromAngle(this.props.windAngle, this.props.windSpeed));
+				p.loop();
+				return p.life > 0;
+			});
+			if (!this.emitting) return this;
+			if (Date.now() - this.lastTime > this.props.rate) {
+				for (var i = 0; i < this.props.count; i++) {
+					this.add();
+				}
+				this.lastTime = Date.now();
+			}
+			return this;
+        }
+        start   () {
+            this.emitting = true;
+			return this;
+        }
+        stop  () {
+            this.emitting = false;
+            return this;
+            
+        }
+       get x  ()  {
+            return this.pos.x
+        }
+        set x  (value) {
+            return this.pos.x = value
+        }
+       get y ()  {
+            return this.pos.y
+        }
+        set y  (value)  {
+            return this.pos.y = value
+        }
+    }
+    console.log('aaa')
+    window.easing = Easing()
+    window.Tween = Tween
+    window.Emitter  =Emitter ; 
+    window.Tween  = Tween;
+    window.Particle = Particle;
+    window.Vector = Vector
+
 })()
-// var Tween = function() {
-// 	function Tween() {
-// 		var duration = arguments.length <= 0 || arguments[0] === undefined ? 1000 : arguments[0];
-// 		var from = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
-// 		var to = arguments.length <= 2 || arguments[2] === undefined ? 1 : arguments[2];
-// 		var easing = arguments.length <= 3 || arguments[3] === undefined ? 'linear' : arguments[3];
-// 		_classCallCheck(this, Tween);
-// 		this.from = from;
-// 		this.to = to;
-// 		this.duration = duration;
-// 		this.easing = easing;
-// 		this.start = this.start.bind(this);
+// var Emitter = function() {
+// 	function Emitter() {
+// 		var canvas = arguments.length <= 0 || arguments[0] === undefined ? window.canvas : arguments[0];
+// 		var x = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+// 		var _this = this;
+// 		var y = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
+// 		var props = arguments.length <= 3 || arguments[3] === undefined ? {} : arguments[3];
+// 		_classCallCheck(this, Emitter);
+// 		this.props = Object.assign({
+// 			size: 200,
+// 			count: 4,
+// 			rate: 50,
+// 			speed: 4,
+// 			fade: 3,
+// 			invert: 1,
+// 			angle: -90,
+// 			spread: 15,
+// 			bounceX: 1,
+// 			bounceY: 1,
+// 			windAngle: 0,
+// 			windSpeed: 0.03
+// 		}, props);
+// 		this.pos = new Vector(x, y);
+// 		this.canvas = canvas;
+// 		this.particles = [];
+// 		this.lastTime = 0;
+// 		this.context = canvas.getContext('2d');
+// 		this.emitting = true;
+// 		['add', 'loop', 'prop', 'start', 'stop'].forEach(function(fn) {
+// 			return _this[fn] = _this[fn].bind(_this);
+// 		});
 // 	}
-// 	_createClass(Tween, [{
-// 		key: 'start',
-// 		value: function start() {
-// 			this.time = Date.now();
+// 	_createClass(Emitter, [{
+// 		key: 'prop',
+// 		value: function prop(key, val) {
+// 			var _this2 = this;
+// 			if ((typeof key === 'undefined' ? 'undefined' : _typeof(key)) == 'object') {
+// 				Object.keys(key).forEach(function(k) {
+// 					return _this2.prop(k, key[k]);
+// 				});
+// 				return this;
+// 			}
+// 			this.props[key] = val;
+// 			return this;
 // 		}
 // 	}, {
-// 		key: 'tween',
+// 		key: 'add',
+// 		value: function add() {
+// 			this.particles.push(new Particle(this.canvas, this.pos.x, this.pos.y, this.props));
+// 			return this;
+// 		}
+// 	}, {
+// 		key: 'loop',
+// 		value: function loop() {
+// 			var _this3 = this;
+// 			this.particles = this.particles.filter(function(p) {
+// 				p.setForce(Vector.fromAngle(_this3.props.windAngle, _this3.props.windSpeed));
+// 				p.loop();
+// 				return p.life > 0;
+// 			});
+// 			if (!this.emitting) return this;
+// 			if (Date.now() - this.lastTime > this.props.rate) {
+// 				for (var i = 0; i < this.props.count; i++) {
+// 					this.add();
+// 				}
+// 				this.lastTime = Date.now();
+// 			}
+// 			return this;
+// 		}
+// 	}, {
+// 		key: 'start',
+// 		value: function start() {
+// 			this.emitting = true;
+// 			return this;
+// 		}
+// 	}, {
+// 		key: 'stop',
+// 		value: function stop() {
+// 			this.emitting = false;
+// 			return this;
+// 		}
+// 	}, {
+// 		key: 'x',
 // 		get: function get() {
-// 			if (!this.time) return this.from;
-// 			var now = Date.now();
-// 			var lapsed = Math.min(now - this.time, this.duration);
-// 			return this.from + Easing[this.easing](lapsed / this.duration) * (this.to - this.from);
+// 			return this.pos.x;
+// 		},
+// 		set: function set(value) {
+// 			return this.pos.x = value;
+// 		}
+// 	}, {
+// 		key: 'y',
+// 		get: function get() {
+// 			return this.pos.y;
+// 		},
+// 		set: function set(value) {
+// 			return this.pos.y = value;
 // 		}
 // 	}]);
-// 	return Tween;
+// 	return Emitter;
 // }();
