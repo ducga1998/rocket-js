@@ -1,42 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Rocket by Nguyen Minh Duc</title>
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-        crossorigin="anonymous"></script>
+    <title>Document</title>
+    <style>
+   body {
+    overflow-x: hidden;
+    background: #596d8b;
+}
+
+.wrapper {
+	height: 100%;
+    position: relative;
+}
+#canvas,
+#rocket {
+	/* pointer-events: none; */
+    position :absolute;
+}
+#rocket,
+.welcome {
+	position: absolute;
+	transition: opacity 3s ease
+}
+#canvas,
+.welcome,
+.footer {
+	transition: opacity 3s ease
+}
+#rocket {
+	transition: opacity 1s ease
+}
+#canvas {
+	opacity: 0;
+	transform: translateY(-250px);
+	transition: transform 2s, opacity 1s;
+}
+#canvas.show {
+	opacity: 1;
+	background: #61a6ff url(../images/cloud.png) left bottom repeat-x;
+	transform: translateY(0);
+}
+#canvas.rocket-fade,
+.welcome.rocket-fade,
+#rocket,
+.footer.rocket-fade.in {
+	opacity: 0;
+}
+.footer.in,
+#rocket.show {
+	opacity: 1
+}
+.welcome {
+	text-align: center;
+	width: 100%;
+	z-index: 10;
+	position: relative;
+}
+.welcome > * {
+	opacity: 0;
+	-webkit-transform: translate3d(0, 40px, 0);
+	transform: translate3d(0, 40px, 0);
+	transition: all .5s;
+}
+.welcome .in {
+	opacity: 1;
+	-webkit-transform: translate3d(0, 0, 0);
+	transform: translate3d(0, 0, 0);
+}
+.welcome__title {
+	color: #596d8b;
+	font-size: 28px;
+	line-height: 28px;
+	margin: 10px 0;
+}
+.welcome__slogan {
+	font-size: 16px;
+	color: #656565;
+	margin: 0 0 30px
+}
+.go {
+	height: 50px;
+	background: #95c828;
+	color: #fff;
+	padding: 0 40px;
+	line-height: 50px;
+	border-radius: 50px;
+	display: inline-block;
+	font-weight: 300;
+}
+.go:hover,
+.go:active,
+.go:focus {
+	background: #7aa71a;
+	color: #fff;
+}
+footer {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	text-align: center;
+	transition: all .5s;
+	opacity: 0;
+}
+@media screen and (max-height: 800px) {
+	.go {
+		height: 40px;
+		line-height: 40px;
+	}
+	.welcome__slogan {
+		margin-bottom: 15px;
+	}
+}
+@media screen and (max-height: 768px) {
+	#rocket svg {
+		max-width: 80px;
+	}
+	.home .footer {
+		position: static;
+		margin-top: 20px;
+	}
+}
+@media screen and (max-height: 680px) {
+	.welcome__title {
+		font-size: 20px;
+		line-height: 20px;
+	}
+	.welcome__slogan {
+		font-size: 14px;
+	}
+}
+@media screen and (max-height: 680px) {
+	.welcome {
+		margin-top: -40px;
+	}
+}
+    </style>
 </head>
-
 <body>
-    <canvas  width = "1000px" height="1000px" id="firstCanvas"></canvas>
+    <div class="wrapper">
+    <canvas width="1000px" height="1000px"  id="canvasId"></canvas>
+    <div id="rocket" class="show">
+           A
+    </div>
+    </div>
     <script src="./rocket.js"></script>
-    <script src ="./useLir.js"></script>
-    <script>
-        // var canvasDom = document.getElementById("firstCanvas")
-        // var ctx = canvasDom.getContext('2d')
-
-        // ctx.beginPath()
-        // ctx.arc(500 , 600, Math.round(100), Math.PI * ((180 + 95) / 180) , Math.PI * 2 );
-        // ctx.fillStyle = "red"
-        // // this.context.fillStyle = 'rgba(255,255,255,1)';
-        // ctx.fill();
-        // ctx.stroke();
-        // ctx.lineTo(70, 80)
-        // ctx.fillRect( 100 , 60, 1000, 1000)
-        // console.log(ctx)
-        // var my_gradient=ctx.createLinearGradient(0,0,170,0);
-
-//   
-// ctx.moveTo(20,20);
-// ctx.lineTo(20,100);
-// ctx.lineTo(70,100);
-// ctx.strokeStyle="red";
-// ctx.stroke();
-    </script>
-    <script src ="./useLir.js"></script>
+    <script src = "./useLir.js"></script>
 </body>
-
 </html>

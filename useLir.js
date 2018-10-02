@@ -3,23 +3,43 @@ void
 function() {
 	var frameTime = 0;
 	var frameRate = 60;
-	var canvas = document.getElementById('firstCanvas')
+	var canvas = document.getElementById('canvasId');
 	var wHeight = window.innerHeight;
 	var mouseX = window.innerWidth / 2;
-    var ctx = canvas.getContext('2d');
-    
-    var rocketAnim = new Tween(5000, 200, 0, 'easeOutElastic');
-    console.log(rocketAnim)
+	var ctx = canvas.getContext('2d');
+	var rocketAnim = new Tween(5000, 200, 0, 'easeOutElastic');
 	var smokeAnim = new Tween(7000, 0, -canvas.height * 2, 'easeOutExpo');
 	var cloudAnim = new Tween(3000, 0, 1, 'linear');
-	var welcome = document.getElementsByClassName('welcome')
+	// var welcome = document.getElementsByClassName('welcome');
+	// var logo = document.getElementsByClassName('welcome__logo');
+	// var title = document.getElementsByClassName('welcome__title');
+	// var slogan = document.getElementsByClassName('welcome__slogan');
+	// var footer = document.getElementsByClassName('footer');
 	var btn = document.getElementsByClassName('go');
+	var rocket  = document.getElementById('rocket')
 
+	var dragging = false
+	document.body.addEventListener('mousedown' ,event => {
+		console.log("ahihi")
+		 dragging = true
+	})
+	
+	document.body.addEventListener('mousemove' ,  (e) => {
+		console.log(e.pageX , e.pageY)
+	if(dragging){
+		// console.log(e.pageX , e.pageY) 
+		mouseX = canvas.width / 4  + e.pageX
+		// console.log(mouseX)
+	}
+	})
+	document.body.addEventListener('mouseup' , event => {
+		dragging = false
+	})
 	canvas.width = window.innerWidth - 40;
-	canvas.height = wHeight * 0.55;
+	canvas.height = wHeight * 1;
 	// welcome[0].style.height = wHeight * 0.45 - 60 + 'px';
-	var rocketY = canvas.height - 203;
-
+	var rocketY = canvas.height - 600;
+	console.log(rocketY)
 	var cloud = new Emitter(canvas, canvas.width / 2, canvas.height - 20, {
 		"size": 75,
 		"count": 2,
@@ -49,13 +69,14 @@ function() {
 		invert: 1
 	}).stop();
 
-	const A  = new Sequence({
+	new Sequence({
 		init: function init() {
 			void
 			function draw(time) {
 				var cloudTween = cloudAnim.tween;
 				ctx.clearRect(0, 0, canvas.width, canvas.height);
-				smoke.y = rocketY + smokeAnim.tween + rocketAnim.tween;
+				smoke.y = 0
+				
 				smoke.x = smoke.x * 0.99 + mouseX * 0.01;
 				cloud.x = cloud.x * 0.99 + mouseX * 0.01;
 				cloud.prop({
@@ -66,8 +87,8 @@ function() {
 				cloud.loop();
 				smoke.loop();
 				var tilt = (mouseX - smoke.x) / canvas.width * 45;
-				rocket.style.top = smoke.y + 20 + 'px';
-				rocket.style.left = smoke.x + 20 + 'px';
+					rocket.style.top = smoke.y  + 'px';
+					rocket.style.left = smoke.x + 20 + 'px';
 				rocket.style.transform = "translate3d(-50%,-75%,0) rotate3d(0,0,1," + tilt + "deg)";
 				if (frameTime) frameRate = frameRate * 0.99 + 1000 / (time - frameTime) * 0.01;
 				frameTime = time;
@@ -83,19 +104,18 @@ function() {
 		110: cloud.start,
 		200: smoke.start,
 		190: rocketAnim.start,
-		800: function _() {
-			logo[0].classList.add('in');
-			title[0].classList.add('in');
-		},
-		950: function _() {
-			slogan[0].classList.add('in');
-		},
-		1100: function _() {
-			btn[0].classList.add('in');
-			footer[0].classList.add('in');
-		}
-    });
-    console.log(A)
+		// 800: function _() {
+		// 	logo[0].classList.add('in');
+		// 	title[0].classList.add('in');
+		// },
+		// 950: function _() {
+		// 	slogan[0].classList.add('in');
+		// },
+		// 1100: function _() {
+		// 	btn[0].classList.add('in');
+		// 	footer[0].classList.add('in');
+		// }
+	});
 	var launched = false;
 	window.rocketFly = function(e) {
 		if (launched) return;
@@ -161,10 +181,40 @@ function() {
 
 		// welcome[0].style.height = wHeight * 0.45 - 60 + 'px';
 	};
-	window.ontouchmove = function(e) {
-		mouseX = canvas.width / 4 + e.pageX / 2;
-	};
-	window.onmousemove = function(e) {
-		mouseX = canvas.width / 4 + e.pageX / 2;
-	};
+	// var dragging  = false
+	// rocket.addEventListener('mousedown' ,event => {
+	// 	console.log("ahihi")
+	// 	 dragging = true
+	// })
+	
+	// rocket.addEventListener('mousemove' ,  (e) => {
+	// if(dragging){
+	// 	console.log(e.pageX , e.pageY) 
+	// 	mouseX = canvas.width / 4 + e.pageX / 2;
+	// 	console.log(mouseX)
+	// }
+	// })
+	// rocket.addEventListener('mouseup' , event => {
+	// 	dragging = false
+	// })
+
+	// window.ontouchmove = function(e) {
+	// 	mouseX = canvas.width / 4 + e.pageX / 2;
+	// };
+	// window.onmousemove = function(e) {
+	// 	mouseX = canvas.width / 4 + e.pageX / 2;
+	// };
+	
 }();
+class test {
+	constructor( a, b) {
+		this.a = a
+		this.b = b
+	}
+	set A (val) {
+		this. a= val
+	} 
+	get A () {
+		return this.a
+	}
+}
