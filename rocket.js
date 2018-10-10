@@ -137,9 +137,7 @@ class Vector {
     static rad2deg(rad) {
         return rad * (180 / Math.PI);
     }
-    static fromAngle() {
-        var deg = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
-        var radius = arguments.length <= 1 || arguments[1] === undefined ? 1 : arguments[1];
+    static fromAngle(deg  , radius) {
         return new Vector(radius * Math.cos(this.deg2rad(deg)), radius * Math.sin(this.deg2rad(deg)));
     }
     static randomRange(from, to) {
@@ -161,6 +159,7 @@ class Particle {
         this.pos = new Vector(x, y);
         this.acc = new Vector();
         this.vel = Vector.fromAngle(this.angle, this.speed);
+        this.color = this.getRandomColor()
     }
     setForce(force) {
         this.acc = force; // trong luc
@@ -176,19 +175,43 @@ class Particle {
         if (this.pos.y - this.size > this.canvas.height) this.life = 0;
         this.render();
     }
+    // loop () {
+    //     this.life = Math.max( 0 , this.life - this.props.fade / 1000) 
+    //     this.radius = this.size * ( this.props.invert  ? (1.05 - this.life) * 0.95  : this.life)
+    //     this.vel.add(this.acc) 
+    //     if(this.pos.x > this.canvas || this.pos.x <= 0 ) this.vel.x *  this.props.bounceX || 0
+    // }
     render() {
+        // console.log(this.pos.y)
         if (this.pos.y - this.size > this.canvas.height || this.pos.y + this.size <= 0) return this;
         this.context.beginPath();
         this.context.arc(Math.round(this.pos.x), Math.round(this.pos.y), Math.round(this.radius), 0, 360);
-        this.context.fillStyle = 'rgba(255,255,255,1)';
+        this.context.fillStyle = this.color
         this.context.fill();
+    }
+     getRandomColor() {
+        var letters = '0123456789ABCDEF';
+        var color = '#';
+        for (var i = 0; i < 6; i++) {
+          color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+      }
+}
+class refineParticle {
+    constructor(canvas , x , y , props ) {
+        this.props = props 
+        this.canvas = canvas
+        this.context = this.canvas.getContext('2d')
+        this.life = 1
+        this.size = Vector.randomRange(props.size /2 , props , size)
     }
 }
 
 /*  ------------------------ ES6 Particle  ------------------- */
 //EMITTER
 
-
+  // it 's render clould or ...
 class Emitter {
     constructor(canvas, x, y, props) {
         this.canvas = canvas
@@ -201,7 +224,7 @@ class Emitter {
                 speed: 4,
                 fade: 3,
                 invert: 1,
-                angle: -90,
+                angle: -100,
                 spread: 15,
                 bounceX: 1,
                 bounceY: 1,
@@ -213,6 +236,7 @@ class Emitter {
         // console.log("log ",this.pos)
         this.canvas = canvas;
         this.particles = [];
+        // window.par = this.Particle
         this.lastTime = 0;
         this.context = canvas.getContext('2d');
         this.emitting = true;
@@ -240,17 +264,19 @@ class Emitter {
         this.particles = this.particles.filter(p => {
             p.setForce(Vector.fromAngle(this.props.windAngle, this.props.windSpeed));
             p.loop();
+            // console.log(p.life)
             return p.life > 0;
         });
         if (!this.emitting) return this;
         if (Date.now() - this.lastTime > this.props.rate) {
             for (var i = 0; i < this.props.count; i++) {
-                this.add();
+                this.add(); // call function add . add is function push array particles
             }
             this.lastTime = Date.now();
         }
         return this;
     }
+    
     start() {
         this.emitting = true;
         return this;
